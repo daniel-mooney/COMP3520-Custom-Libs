@@ -44,18 +44,6 @@ struct array_header {
 #define array(type) (type *) array_init(sizeof(type), 0)
 
 
-/**
- * @brief Append an item to the end of an array
- * 
- * @param array Pointer to the start of the array
- * @param item The item to append
- * 
- * @return `array` Pointer to the start of the array
- */
-#define array_append(array, item) (\
-    (array) = array_ensure_capacity(array, 1), \
-    (array)[array_header(array)->length++] = (item), \
-    (array))
 
 
 /**
@@ -76,10 +64,10 @@ struct array_header {
  * @brief Initialise memory for an array on the heap
  * 
  * @param item_size Size of data type in bytes
- * @param initial_capacity
+ * @param initial_length Initial length of the array
  * @return `array` A pointer to the start of data
  */
-void *array_init(size_t item_size, size_t initial_capacity);
+void *array_init(size_t item_size, size_t initial_length);
 
 /**
  * @brief Free the memory allocated for an array
@@ -99,6 +87,15 @@ void array_destroy(void *array);
  * @return `array` Pointer to the start of the array
  */
 void *array_resize(void *array, size_t new_capacity);
+
+/**
+ * @brief Adds an item to the end of an array
+ * 
+ * @param array 
+ * @param item 
+ * @return void* Pointer to the start of the array
+ */
+void *array_append(void *array, void *item);
 
 
 /**
@@ -121,6 +118,7 @@ size_t array_capacity(void *array);
 /**
  * @brief Shuffles the elements of an array in place
  * @note Change the seed of the RNG by using `srand()`
+ * @warning Not thread-safe
  * 
  * @param array Pointer to the start of the array
  * @return void* 
@@ -160,16 +158,23 @@ void *array_data(void *array);
 void *array_ensure_capacity(void *array, size_t n_append);
 
 
-// /**
-//  * @todo
-//  * @brief Converts a raw pointer to an `array` type
-//  * 
-//  * @param ptr Raw pointer defining a dynamic array
-//  * @param length Length of the array
-//  * @return `array` Converted array type 
-//  */
-// void *raw_to_array(void *ptr, size_t length);
+/**
+ * @brief Converts a raw pointer to an `array` type
+ * 
+ * @param ptr Raw pointer defining a dynamic array
+ * @param item_size Size of the data type in bytes
+ * @param length Length of the array
+ * @return `array` Converted array type 
+ */
+void *raw_to_array(void *ptr, size_t item_size, size_t length);
 
+/**
+ * @brief Creates a deep copy of an array
+ * 
+ * @param array 
+ * @return void* 
+ */
+void *array_copy(void *array);
 
 
 #endif // ARRAY_H

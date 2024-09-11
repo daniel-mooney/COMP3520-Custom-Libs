@@ -16,8 +16,8 @@ int my_sem_post(my_semaphore_t *sem) {
     pthread_mutex_lock(&sem->lock);
     sem->counter++;
 
-    // Release waiting threads if newly positive
-    if (sem->counter == 1) {
+    // Release waiting threads if no longer negative
+    if (sem->counter == 0) {
         pthread_cond_broadcast(&sem->cond);
     }
 
@@ -30,7 +30,7 @@ int my_sem_post_many(my_semaphore_t *sem, int value) {
     sem->counter += value;
 
     // Release waiting threads if newly positive
-    if (sem->counter > 0 && sem->counter <= value) {
+    if (sem->counter >= 0 && sem->counter < value) {
         pthread_cond_broadcast(&sem->cond);
     }
 

@@ -2,15 +2,15 @@
 
 
 //----------
-void *array_init(size_t item_size, size_t initial_capacity) {
-    size_t init_size = item_size * initial_capacity + sizeof(struct array_header);
+void *array_init(size_t item_size, size_t initial_length) {
+    size_t init_size = item_size * initial_length + sizeof(struct array_header);
     struct array_header *header = malloc(init_size);
     void *ptr = NULL;           // pointer to the start of data
 
     // Initialise header values
     if (header) {
-        header->length = 0;
-        header->capacity = 0;
+        header->length = initial_length;
+        header->capacity = initial_length;
         header->item_size = item_size;
 
         ptr = header + 1;
@@ -38,6 +38,24 @@ void *array_resize(void *array, size_t new_capacity) {
     h = realloc(h, new_size);
     
     return h != NULL ? (h + 1) : NULL;
+}
+
+//----------
+void *array_append(void *array, void *item) {
+    array = array_ensure_capacity(array, 1);
+
+    // Location of array header may change after ensure_capacity
+    struct array_header *h = array_header(array);
+
+    char *data_ptr = array;
+
+    if (array) {
+        char *dest = data_ptr + h->length * h->item_size;
+        memcpy(dest, item, h->item_size);
+        h->length++;
+    }
+
+    return array;
 }
 
 
@@ -105,6 +123,24 @@ void *array_shuffle(void *array) {
 
 
 //----------
-// void *raw_to_array(void *ptr, size_t length) {
-//     // @todo
-// }
+void *raw_to_array(void *ptr, size_t item_size, size_t length) {
+    void *array = array_init(item_size, length);
+
+    if (array) {
+        memcpy(array, ptr, item_size * length);
+    }
+
+    return array;
+}
+
+//----------
+void *array_copy(void *array) {
+    struct array_header *h = array_header(array);
+    void *copy = array_init(h->item_size, h->length);
+
+    if (copy) {
+        memcpy(copy, array, h->item_size * h->length);
+    }
+
+    return copy;
+}
