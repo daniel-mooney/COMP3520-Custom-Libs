@@ -4,7 +4,7 @@
 //----------
 void *array_init(size_t item_size, size_t initial_length) {
     size_t init_size = item_size * initial_length + sizeof(struct array_header);
-    struct array_header *header = malloc(init_size);
+    struct array_header *header = (struct array_header *) malloc(init_size);
     void *ptr = NULL;           // pointer to the start of data
 
     // Initialise header values
@@ -35,7 +35,7 @@ void *array_resize(void *array, size_t new_capacity) {
     struct array_header *h = array_header(array);
     size_t new_size = h->item_size * new_capacity + sizeof(struct array_header);
 
-    h = realloc(h, new_size);
+    h = (struct array_header *) realloc(h, new_size);
     
     return h != NULL ? (h + 1) : NULL;
 }
@@ -47,7 +47,7 @@ void *array_append(void *array, void *item) {
     // Location of array header may change after ensure_capacity
     struct array_header *h = array_header(array);
 
-    char *data_ptr = array;
+    char *data_ptr = (char *)array;
 
     if (array) {
         char *dest = data_ptr + h->length * h->item_size;
@@ -100,9 +100,9 @@ void *array_ensure_capacity(void *array, size_t n_append) {
 
 void *array_shuffle(void *array) {
     struct array_header *h = array_header(array);
-    char *data_ptr = array;
+    char *data_ptr = (char*)array;
 
-    for (int i = 0; i < h->length; i++) {
+    for (size_t i = 0; i < h->length; i++) {
         // Swap the elements with a random index
         int swap_index = rand() % h->length;
 

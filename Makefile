@@ -1,28 +1,52 @@
-CC = gcc
-CFLAGS = -Wall -g -pedantic -std=c11 -fsanitize=address
-TARGET = queue_test
+# Makefile for running test cases
+CC = g++
+CPPFLAGS = -Wall -g -pedantic -std=c++11 -fsanitize=address
+TESTLIBS = -lgtest -lgtest_main -lpthread
 
-# Collect source and object files
-SRC_DIR = data_structures
+TEST_DIR = tests
 OBJ_DIR = build
-SRC = $(wildcard $(SRC_DIR)/*.c)
-OBJ = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
+
+# Target to test
+ifeq ($(MAKECMDGOALS), test)
+	ifndef TARGET
+		$(error TARGET to test is not defined)
+	endif
+endif
+
+# Get the directory of the target
+TARGET_DIR = $(dir $(TARGET))
+TARGET_FILENAME = $(notdir $(TARGET))
+
+# Convert to test file path
+TEST_FILE = $(TEST_DIR)/$(TARGET_DIR)test_$(TARGET_FILENAME)pp
+TEST_TARGET = $(patsubst %.c, test_%.exe, $(TARGET_FILENAME))
+
+# Object files
+TARGET_OBJ = $(OBJ_DIR)/$(TARGET_FILENAME).o
+TEST_OBJ = $(OBJ_DIR)/test_$(TARGET_FILENAME).o
 
 
-all: $(TARGET)
+test: $(TEST_TARGET)
 
-$(TARGET): $(OBJ) $(TARGET).c
-	$(CC) $(CFLAGS) -o $@.exe $^
+$(TEST_TARGET): $(TARGET_OBJ) $(TEST_OBJ)
+	$(CC) $(CPPFLAGS) -o $@ $^ $(TESTLIBS)
+	./$@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+# Create target and test object files
+$(TARGET_OBJ): $(TARGET)
+	$(CC) $(CPPFLAGS) -c -o $@ $<
 
-# Pipe `|` means order-only prerequisite i.e. only check if $(OBJ_DIR) exists, not timestamp
-$(OBJ): | $(OBJ_DIR)		
+$(TEST_OBJ): $(TEST_FILE)
+	$(CC) $(CPPFLAGS) -c -o $@ $<
+
+
+# Create object directory
+$(TARGET_OBJ) $(TEST_OBJ): | $(OBJ_DIR)
 
 $(OBJ_DIR):
-	mkdir $(OBJ_DIR)
+	mkdir -p $(OBJ_DIR)
 
+# Clean up
 clean:
-	rm -f $(TARGET).exe
+	rm -f test_*.exe $(OBJ_DIR)/*.o
 	rm -rf $(OBJ_DIR)
