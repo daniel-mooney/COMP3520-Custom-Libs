@@ -6,29 +6,16 @@
 #include <gtest/gtest.h>
 
 
-// Test the array_append function
-class ArrayTest: public ::testing::Test {
-    protected:
-        void *array;
-
-        virtual void SetUp() override {
-            array = array_init(sizeof(int), 0);
-        }
-
-        virtual void TearDown() override {
-            array_destroy(array);
-        }
-};
-
-
-TEST_F(ArrayTest, Init) {
+TEST(ArrayTest, Init) {
+    void *array = array_init(sizeof(int), 0);
     ASSERT_NE(array, nullptr);
     EXPECT_EQ(array_length(array), 0);
     EXPECT_EQ(array_capacity(array), 0);
+    array_destroy(array);
 }
 
-
-TEST_F(ArrayTest, Append) {
+TEST(ArrayTest, Append) {
+    void *array = array_init(sizeof(int), 0);
     int items[] = {1, 2, 3, 4, 5};
 
     for (int i = 0; i < 5; i++) {
@@ -41,9 +28,11 @@ TEST_F(ArrayTest, Append) {
     for (int i = 0; i < 5; i++) {
         EXPECT_EQ(data[i], items[i]);
     }
+
+    array_destroy(array);
 }
 
-TEST_F(ArrayTest, RawToArray) {
+TEST(ArrayTest, RawToArray) {
     int items[] = {1, 2, 3, 4, 5};
     int *array_from_raw = (int *)raw_to_array(items, sizeof(int), 5);
 
@@ -56,7 +45,8 @@ TEST_F(ArrayTest, RawToArray) {
     array_destroy(array_from_raw);
 }
 
-TEST_F(ArrayTest, AppendAndPop) {
+TEST(ArrayTest, AppendAndPop) {
+    void *array = array_init(sizeof(int), 0);
     int items[] = {1, 2, 3, 4, 5};
 
     for (int i = 0; i < 5; i++) {
@@ -72,9 +62,12 @@ TEST_F(ArrayTest, AppendAndPop) {
     // Try to pop from an empty array
     array_pop(array, NULL);
     ASSERT_EQ(array_length(array), 0);
+
+    array_destroy(array);
 }
 
-TEST_F(ArrayTest, Length) {
+TEST(ArrayTest, Length) {
+    void *array = array_init(sizeof(int), 0);
     int items[] = {1, 2, 3, 4, 5};
 
     for (int i = 0; i < 5; i++) {
@@ -82,9 +75,12 @@ TEST_F(ArrayTest, Length) {
     }
 
     ASSERT_EQ(array_length(array), 5);
+
+    array_destroy(array);
 }
 
-TEST_F(ArrayTest, BasicGet) {
+TEST(ArrayTest, BasicGet) {
+    void *array = array_init(sizeof(int), 0);
     int items[] = {1, 2, 3, 4, 5};
     
     for (int i = 0; i < 5; i++) {
@@ -96,9 +92,12 @@ TEST_F(ArrayTest, BasicGet) {
         array_get(array, i, &item);
         EXPECT_EQ(item, items[i]);
     }
+
+    array_destroy(array);
 } 
 
-TEST_F(ArrayTest, Resize) {
+TEST(ArrayTest, Resize) {
+    void *array = array_init(sizeof(int), 0);
     int items[] = {1, 2, 3, 4, 5};
 
     for (int i = 0; i < 5; i++) {
@@ -113,9 +112,12 @@ TEST_F(ArrayTest, Resize) {
         array_get(array, i, &item);
         EXPECT_EQ(item, items[i]);
     }
+
+    array_destroy(array);
 }
 
-TEST_F(ArrayTest, Copy) {
+TEST(ArrayTest, Copy) {
+    void *array = array_init(sizeof(int), 0);
     int items[] = {1, 2, 3, 4, 5};
 
     for (int i = 0; i < 5; i++) {
@@ -134,4 +136,5 @@ TEST_F(ArrayTest, Copy) {
     }
 
     array_destroy(copy);
+    array_destroy(array);
 }
