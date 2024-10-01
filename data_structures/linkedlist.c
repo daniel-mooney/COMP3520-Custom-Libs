@@ -1,4 +1,5 @@
 #include "linkedlist.h"
+#include <stdio.h>
 
 // +---------------------------------------------------------------------------+
 // |                           Static Functions                                |
@@ -206,6 +207,51 @@ int linkedlist_from_raw(linkedlist_t *list, size_t item_size, size_t length, con
 
     for (size_t i = 0; i < length; i++) {
         linkedlist_append(list, raw_ptr + i * item_size);
+    }
+
+    return 0;
+}
+
+
+// --------------------
+int linkedlist_iter_init(
+    linkedlist_iterator_t *iterator,
+    linkedlist_t *list,
+    int start,
+    int reverse
+) {
+    if (abs(start) > list->header.length) {
+        return 1;
+    }
+
+    size_t start_idx = start < 0 ? list->header.length + start : start;
+
+    // Find the node at the start index
+    linkedlist_node_t *current = list->head;
+
+    for (size_t i = 0; i < start_idx; i++) {
+        current = current->next;
+    }
+
+    iterator->next = current;
+    iterator->reverse = reverse;
+    iterator->item_size = list->header.item_size;
+
+    return 0;
+}
+
+// --------------------
+int linkedlist_iter_next(linkedlist_iterator_t *iterator, void *item) {
+    if (!iterator->next) {
+        return 1;
+    }
+
+    memcpy(item, iterator->next->data, iterator->item_size);
+
+    if (iterator->reverse) {
+        iterator->next = iterator->next->prev;
+    } else {
+        iterator->next = iterator->next->next;
     }
 
     return 0;

@@ -48,13 +48,14 @@ typedef struct linkedlist {
 /**
  * @brief An iterator for a linked list
  * 
- * @param current Pointer to the current node
+ * @param next Pointer to the next node in the list
  * @param reverse Flag to indicate if the iterator is in reverse
  * 
  */
 typedef struct linkedlist_iterator {
-    linkedlist_node_t *current;
+    linkedlist_node_t *next;
     int reverse;
+    size_t item_size;
 } linkedlist_iterator_t;
 
 
@@ -99,7 +100,11 @@ size_t linkedlist_item_size(linkedlist_t *list);
  * @param item A pointer to the item to insert
  * @return int 0 if successful, 1 otherwise
  */
-int linkedlist_insert(linkedlist_t *list, size_t index, const void *item);
+int linkedlist_insert(
+    linkedlist_t *list,
+    size_t index,
+    const void *item
+);
 
 /**
  * @brief Remove the item at the given index
@@ -149,17 +154,28 @@ int linkedlist_get(linkedlist_t *list, size_t index, void *item);
  * @param raw A pointer to the raw array
  * @return int 0 if successful, 1 otherwise
  */
-int linkedlist_from_raw(linkedlist_t *list, size_t item_size, size_t length, const void *raw);
+int linkedlist_from_raw(
+    linkedlist_t *list,
+    size_t item_size,
+    size_t length,
+    const void *raw
+);
 
 /**
  * @brief Create an iterator for the list
  * 
+ * @param iterator A pointer to the iterator object
  * @param list A pointer to the linked list object
  * @param start The index to start the iterator. Negative indices are from the end.
  * @param reverse Flag to indicate if the iterator should be in reverse
- * @return linkedlist_iterator_t The iterator object
+ * @return int 0 if successful, 1 otherwise
  */
-linkedlist_iterator_t linkedlist_iterator(linkedlist_t *list, int start, int reverse);
+int linkedlist_iter_init(
+    linkedlist_iterator_t *iterator,
+    linkedlist_t *list,
+    int start,
+    int reverse
+);
 
 /**
  * @brief Get the next item from the iterator
@@ -168,15 +184,6 @@ linkedlist_iterator_t linkedlist_iterator(linkedlist_t *list, int start, int rev
  * @param item A pointer to the item to store the retrieved item
  * @return int 0 if successful, 1 if the end of the list is reached
  */
-int linkedlist_next(linkedlist_iterator_t *iterator, void *item);
-
-/**
- * @brief Get the previous item from the iterator
- * 
- * @param iterator A pointer to the iterator object
- * @param item A pointer to the item to store the retrieved item
- * @return int 0 if successful, 1 if the start of the list is reached
- */
-int linkedlist_prev(linkedlist_iterator_t *iterator, void *item);
+int linkedlist_iter_next(linkedlist_iterator_t *iterator, void *item);
 
 #endif // LINKEDLIST_H
