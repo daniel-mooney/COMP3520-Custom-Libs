@@ -20,7 +20,7 @@ int queue_push(queue_t *queue, void *item, void *removed_item) {
     // If the queue is full, remove the item at the front
     int queue_is_full = 0;
 
-    if (queue->header.length == queue->header.capacity) {
+    if (queue->header.length == queue->header.capacity && queue->header.is_bounded) {
         queue_pop(queue, removed_item);
         queue_is_full = 1;
     }

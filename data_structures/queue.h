@@ -33,9 +33,10 @@ typedef struct queue_node {
  * 
  */
 typedef struct queue_header {
-    signed long capacity;               // Capacity initialised by user
+    size_t capacity;                    // Capacity initialised by user
     size_t item_size;                   // Size of data type in bytes
     size_t length;                      // Current number of items in queue
+    char is_bounded;                    // 1 if the queue is bounded, 0 otherwise
 } queue_header_t;
 
 /**
