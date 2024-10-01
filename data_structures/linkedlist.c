@@ -1,8 +1,11 @@
 #include "linkedlist.h"
 
+// +---------------------------------------------------------------------------+
+// |                           Static Functions                                |
+// +---------------------------------------------------------------------------+
 
 // --------------------
-linkedlist_node_t *node_create(size_t item_size, const void *item) {
+static linkedlist_node_t *node_create(size_t item_size, const void *item) {
     linkedlist_node_t *node = (linkedlist_node_t *) malloc(sizeof(linkedlist_node_t));
 
     if (!node) {
@@ -26,14 +29,14 @@ linkedlist_node_t *node_create(size_t item_size, const void *item) {
 
 
 // --------------------
-void node_destroy(linkedlist_node_t *current) {
+static void node_destroy(linkedlist_node_t *current) {
     free(current->data);
     free(current);
 }
 
 
 // --------------------
-void node_insert(linkedlist_node_t *prev_node, linkedlist_node_t *insert_node) {
+static void node_insert(linkedlist_node_t *prev_node, linkedlist_node_t *insert_node) {
     insert_node->next = prev_node->next;
     insert_node->prev = prev_node;
 
@@ -46,7 +49,7 @@ void node_insert(linkedlist_node_t *prev_node, linkedlist_node_t *insert_node) {
 
 
 // --------------------
-void node_detach(linkedlist_node_t *node) {
+static void node_detach(linkedlist_node_t *node) {
     if (node->prev) {
         node->prev->next = node->next;
     }
@@ -55,6 +58,11 @@ void node_detach(linkedlist_node_t *node) {
         node->next->prev = node->prev;
     }
 }
+
+
+// +---------------------------------------------------------------------------+
+// |                           Public Functions                                |
+// +---------------------------------------------------------------------------+
 
 
 // --------------------
@@ -109,8 +117,12 @@ int linkedlist_insert(linkedlist_t *list, size_t index, const void *item) {
     }
 
     if (index == 0) {
-        list->head->prev = node;
         node->next = list->head;
+        
+        if (list->head) {
+            list->head->prev = node;
+        }
+
         list->head = node;
     } else {
         linkedlist_node_t *current = list->head;

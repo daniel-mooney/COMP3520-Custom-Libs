@@ -179,42 +179,4 @@ int linkedlist_next(linkedlist_iterator_t *iterator, void *item);
  */
 int linkedlist_prev(linkedlist_iterator_t *iterator, void *item);
 
-
-// +---------------------------------------------------------------------------+
-// |                           Private Interface                               |
-// +---------------------------------------------------------------------------+
-
-/**
- * @brief Create a linked list node
- * 
- * @param item_size The size of the item in bytes
- * @param item A pointer to the item to store in the node
- * @return linkedlist_node_t* A pointer to the created node
- */
-static linkedlist_node_t *node_create(size_t item_size, const void *item);
-
-/**
- * @brief Destroy a linked list node
- * 
- * @param current A pointer to the node to destroy
- */
-static void node_destory(linkedlist_node_t *current);
-
-/**
- * @brief Insert a node after a given node
- * 
- * @param prev_node A pointer to the previous node
- * @param new_node A pointer to the new node
- */
-static void node_insert(linkedlist_node_t *prev_node, linkedlist_node_t *insert_node);
-
-/**
- * @brief Detach a node from the list
- * @note The memory for the node is not freed
- * 
- * @param node A pointer to the node to detach
- */
-static void node_detach(linkedlist_node_t *node);
-
-
 #endif // LINKEDLIST_H
