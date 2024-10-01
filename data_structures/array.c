@@ -36,6 +36,7 @@ void *array_resize(void *array, size_t new_capacity) {
     size_t new_size = h->item_size * new_capacity + sizeof(struct array_header);
 
     h = (struct array_header *) realloc(h, new_size);
+    h->capacity = new_capacity;
     
     return h != NULL ? (h + 1) : NULL;
 }
@@ -53,6 +54,34 @@ void *array_append(void *array, void *item) {
         char *dest = data_ptr + h->length * h->item_size;
         memcpy(dest, item, h->item_size);
         h->length++;
+    }
+
+    return array;
+}
+
+void *array_pop(void *array, void *item) {
+    struct array_header *h = array_header(array);
+
+    if (h->length > 0) {
+        h->length--;
+
+        if (item) {
+            char *data_ptr = (char *)array;
+            char *src = data_ptr + h->length * h->item_size;
+            memcpy(item, src, h->item_size);
+        }
+    }
+
+    return array;
+}
+
+void *array_get(void *array, size_t index, void *item) {
+    struct array_header *h = array_header(array);
+
+    if (index < h->length) {
+        char *data_ptr = (char *)array;
+        char *src = data_ptr + index * h->item_size;
+        memcpy(item, src, h->item_size);
     }
 
     return array;

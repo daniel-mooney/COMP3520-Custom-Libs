@@ -43,19 +43,6 @@ struct array_header {
  */
 #define array(type) (type *) array_init(sizeof(type), 0)
 
-
-
-
-/**
- * @brief Remove the last item from an array
- * 
- */
-#define array_pop(array) (\
-    (array_header(array)->length > 0) ? \
-    (array_header(array)->length--, (array)) : \
-    (array))
-
-
 // +---------------------------------------------------------------------------+
 // |                           Public Interface                                |
 // +---------------------------------------------------------------------------+
@@ -75,7 +62,6 @@ void *array_init(size_t item_size, size_t initial_length);
  * @param array Pointer to the start of the array
  */
 void array_destroy(void *array);
-
 
 /**
  * @brief Change the capacity of an array
@@ -97,6 +83,25 @@ void *array_resize(void *array, size_t new_capacity);
  */
 void *array_append(void *array, void *item);
 
+/**
+ * @brief Removes the last item from the array
+ * 
+ * @param array Pointer to the array
+ * @param item Item that was removed. If NULL, the item is not returned
+ * 
+ * @return void* Pointer to the start of the array
+ */
+void *array_pop(void *array, void *item);
+
+/**
+ * @brief Retrieves the item at the given index
+ * 
+ * @param array 
+ * @param index 
+ * @param item The item at the given index
+ * @return void* Pointer to the start of the array
+ */
+void *array_get(void *array, size_t index, void *item);
 
 /**
  * @brief Get the length of an array
@@ -124,6 +129,24 @@ size_t array_capacity(void *array);
  * @return void* 
  */
 void *array_shuffle(void *array);
+
+/**
+ * @brief Converts a raw pointer to an `array` type
+ * 
+ * @param ptr Raw pointer defining a dynamic array
+ * @param item_size Size of the data type in bytes
+ * @param length Length of the array
+ * @return void * Converted array type 
+ */
+void *raw_to_array(void *ptr, size_t item_size, size_t length);
+
+/**
+ * @brief Creates a deep copy of an array
+ * 
+ * @param array 
+ * @return void* A pointer to the copy of the array
+ */
+void *array_copy(void *array);
 
 
 // +---------------------------------------------------------------------------+
@@ -156,25 +179,6 @@ void *array_data(void *array);
  * @return `array` Pointer to the start of the array
  */
 void *array_ensure_capacity(void *array, size_t n_append);
-
-
-/**
- * @brief Converts a raw pointer to an `array` type
- * 
- * @param ptr Raw pointer defining a dynamic array
- * @param item_size Size of the data type in bytes
- * @param length Length of the array
- * @return `array` Converted array type 
- */
-void *raw_to_array(void *ptr, size_t item_size, size_t length);
-
-/**
- * @brief Creates a deep copy of an array
- * 
- * @param array 
- * @return void* 
- */
-void *array_copy(void *array);
 
 
 #endif // ARRAY_H
