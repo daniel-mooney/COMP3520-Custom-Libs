@@ -5,7 +5,13 @@
 // |                           Static Functions                                |
 // +---------------------------------------------------------------------------+
 
-// --------------------
+/**
+ * @brief Creates a new node
+ * 
+ * @param item_size 
+ * @param item 
+ * @return linkedlist_node_t* Pointer to the new node
+ */
 static linkedlist_node_t *node_create(size_t item_size, const void *item) {
     linkedlist_node_t *node = (linkedlist_node_t *) malloc(sizeof(linkedlist_node_t));
 
@@ -28,15 +34,22 @@ static linkedlist_node_t *node_create(size_t item_size, const void *item) {
     return node;
 }
 
-
-// --------------------
-static void node_destroy(linkedlist_node_t *current) {
-    free(current->data);
-    free(current);
+/**
+ * @brief De-allocates a node's memory
+ * 
+ * @param current 
+ */
+static void node_destroy(linkedlist_node_t *node) {
+    free(node->data);
+    free(node);
 }
 
-
-// --------------------
+/**
+ * @brief Inserts a node after the given node
+ * 
+ * @param prev_node 
+ * @param insert_node 
+ */
 static void node_insert(linkedlist_node_t *prev_node, linkedlist_node_t *insert_node) {
     insert_node->next = prev_node->next;
     insert_node->prev = prev_node;
@@ -48,8 +61,11 @@ static void node_insert(linkedlist_node_t *prev_node, linkedlist_node_t *insert_
     prev_node->next = insert_node;
 }
 
-
-// --------------------
+/**
+ * @brief Detaches a node from the list
+ * 
+ * @param node 
+ */
 static void node_detach(linkedlist_node_t *node) {
     if (node->prev) {
         node->prev->next = node->next;
