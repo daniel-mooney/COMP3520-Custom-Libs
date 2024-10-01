@@ -148,6 +148,14 @@ void *raw_to_array(void *ptr, size_t item_size, size_t length);
  */
 void *array_copy(void *array);
 
+/**
+ * @brief Returns the size of an item in the array
+ * 
+ * @param array 
+ * @return size_t 
+ */
+size_t array_item_size(void *array);
+
 
 // +---------------------------------------------------------------------------+
 // |                           Private Interface                               |

@@ -173,3 +173,9 @@ void *array_copy(void *array) {
 
     return copy;
 }
+
+//----------
+size_t array_item_size(void *array) {
+    struct array_header *h = array_header(array);
+    return h->item_size;
+}

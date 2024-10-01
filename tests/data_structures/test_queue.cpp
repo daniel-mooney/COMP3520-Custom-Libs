@@ -201,3 +201,48 @@ TEST(QueueTest, CharTest) {
     queue_destroy(&queue);
     
 }
+
+struct Point {
+    int x;
+    int y;
+};
+
+TEST(QueueTest, StructTest) {
+    queue_t queue;
+    int capacity = 20;
+    queue_init(&queue, sizeof(struct Point), capacity);
+
+    ASSERT_EQ(queue_capacity(&queue), capacity);
+    ASSERT_EQ(queue_length(&queue), 0);
+
+    EXPECT_EQ(queue_is_empty(&queue), 1);
+    EXPECT_EQ(queue_item_size(&queue), sizeof(struct Point));
+
+    struct Point items[] = {{1, 2}, {3, 4}, {5, 6}, {7, 8}, {9, 10}};
+
+    for (int i = 0; i < 5; i++) {
+        queue_push(&queue, &items[i], NULL);
+    }
+
+    ASSERT_EQ(queue_length(&queue), 5);
+
+    struct Point item;
+
+    queue_head(&queue, &item);
+    EXPECT_EQ(item.x, items[0].x);
+    EXPECT_EQ(item.y, items[0].y);
+
+    queue_tail(&queue, &item);
+    EXPECT_EQ(item.x, items[4].x);
+    EXPECT_EQ(item.y, items[4].y);
+
+    for (int i = 0; i < 5; i++) {
+        struct Point item;
+        queue_pop(&queue, &item);
+        EXPECT_EQ(item.x, items[i].x);
+        EXPECT_EQ(item.y, items[i].y);
+    }
+
+    EXPECT_EQ(queue_is_empty(&queue), 1);
+    queue_destroy(&queue);
+}
