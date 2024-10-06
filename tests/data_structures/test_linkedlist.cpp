@@ -285,3 +285,58 @@ TEST(LinkedList, SortDescending) {
 
     linkedlist_destroy(&list);
 }
+
+TEST(LinkedList, Head) {
+    linkedlist_t list;
+    linkedlist_init(&list, sizeof(int));
+
+    int items[] = {1, 2, 3, 4, 5};
+
+    linkedlist_from_raw(&list, sizeof(int), 5, items);
+
+    int head;
+    linkedlist_head(&list, &head);
+
+    EXPECT_EQ(head, 1);
+
+    linkedlist_destroy(&list);
+}
+
+TEST(LinkedList, Tail) {
+    linkedlist_t list;
+    linkedlist_init(&list, sizeof(int));
+
+    int items[] = {1, 2, 3, 4, 5};
+
+    linkedlist_from_raw(&list, sizeof(int), 5, items);
+
+    int tail;
+    linkedlist_tail(&list, &tail);
+
+    EXPECT_EQ(tail, 5);
+
+    linkedlist_destroy(&list);
+}
+
+TEST(LinkedList, Copy) {
+    linkedlist_t list;
+    linkedlist_init(&list, sizeof(int));
+
+    int items[] = {1, 2, 3, 4, 5};
+
+    linkedlist_from_raw(&list, sizeof(int), 5, items);
+
+    linkedlist_t copy;
+    linkedlist_copy(&copy, &list);
+    linkedlist_destroy(&list);
+
+    EXPECT_EQ(linkedlist_length(&copy), 5);
+
+    int item;
+    for (int i = 0; i < 5; i++) {
+        linkedlist_get(&copy, i, &item);
+        EXPECT_EQ(item, items[i]);
+    }
+
+    linkedlist_destroy(&copy);
+}

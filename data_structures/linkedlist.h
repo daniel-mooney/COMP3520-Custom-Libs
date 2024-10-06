@@ -146,6 +146,33 @@ int linkedlist_pop(linkedlist_t *list, void *item);
 int linkedlist_get(linkedlist_t *list, size_t index, void *item);
 
 /**
+ * @brief Get the head of the list
+ * 
+ * @param list A pointer to the linked list object
+ * @param item A pointer to the item to store the head
+ * @return int 0 if successful, 1 otherwise
+ */
+int linkedlist_head(linkedlist_t *list, void *item);
+
+/**
+ * @brief Get the tail of the list
+ * 
+ * @param list A pointer to the linked list object
+ * @param item A pointer to the item to store the tail
+ * @return int 0 if successful, 1 otherwise
+ */
+int linkedlist_tail(linkedlist_t *list, void *item);
+
+/**
+ * @brief Copy the contents of one list to another
+ * 
+ * @param dest A pointer to the destination linked list object
+ * @param src A pointer to the source linked list object
+ * @return int 0 if successful, 1 otherwise
+ */
+int linkedlist_copy(linkedlist_t *dest, linkedlist_t *src);
+
+/**
  * @brief Sort the list in place
  * 
  * @param list A pointer to the linked list object

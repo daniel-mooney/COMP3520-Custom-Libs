@@ -228,6 +228,26 @@ int linkedlist_from_raw(linkedlist_t *list, size_t item_size, size_t length, con
     return 0;
 }
 
+int linkedlist_head(linkedlist_t *list, void *item) {
+    if (!list->head) {
+        return 1;
+    }
+
+    memcpy(item, list->head->data, list->header.item_size);
+
+    return 0;
+}
+
+int linkedlist_tail(linkedlist_t *list, void *item) {
+    if (!list->tail) {
+        return 1;
+    }
+
+    memcpy(item, list->tail->data, list->header.item_size);
+
+    return 0;
+}
+
 // --------------------
 void linkedlist_sort(linkedlist_t *list, int (*compare)(const void *, const void *)) {
     linkedlist_node_t *current = list->head;
@@ -248,6 +268,20 @@ void linkedlist_sort(linkedlist_t *list, int (*compare)(const void *, const void
 
         current = current->next;
     }
+}
+
+// --------------------
+int linkedlist_copy(linkedlist_t *dest, linkedlist_t *src) {
+    linkedlist_init(dest, src->header.item_size);
+
+    linkedlist_node_t *current = src->head;
+
+    while (current) {
+        linkedlist_append(dest, current->data);
+        current = current->next;
+    }
+
+    return 0;
 }
 
 // --------------------
