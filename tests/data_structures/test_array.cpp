@@ -232,3 +232,41 @@ TEST(ArrayTest, Structs) {
 
     array_destroy(array);
 }
+
+
+TEST(ArrayTest, SortAscending) {
+    int items[] = {5, 3, 1, 4, 2};
+    void *array = raw_to_array(items, sizeof(int), 5);
+
+    array_sort(array, [](const void *a, const void *b) -> int {
+        return *(int *)a - *(int *)b;
+    });
+
+    int sorted[] = {1, 2, 3, 4, 5};
+    for (int i = 0; i < 5; i++) {
+        int item;
+        array_get(array, i, &item);
+        EXPECT_EQ(item, sorted[i]);
+    }
+
+    array_destroy(array);
+}
+
+
+TEST(ArrayTest, SortDescending) {
+    int items[] = {5, 3, 1, 4, 2};
+    void *array = raw_to_array(items, sizeof(int), 5);
+
+    array_sort(array, [](const void *a, const void *b) -> int {
+        return *(int *)b - *(int *)a;
+    });
+
+    int sorted[] = {5, 4, 3, 2, 1};
+    for (int i = 0; i < 5; i++) {
+        int item;
+        array_get(array, i, &item);
+        EXPECT_EQ(item, sorted[i]);
+    }
+
+    array_destroy(array);
+}

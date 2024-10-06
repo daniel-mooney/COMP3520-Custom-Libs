@@ -173,3 +173,9 @@ size_t array_item_size(void *array) {
     struct array_header *h = array_header(array);
     return h->item_size;
 }
+
+//----------
+void array_sort(void *array, int (*compare)(const void *, const void *)) {
+    struct array_header *h = array_header(array);
+    qsort(array, h->length, h->item_size, compare);
+}

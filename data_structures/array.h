@@ -156,5 +156,17 @@ void *array_copy(void *array);
  */
 size_t array_item_size(void *array);
 
+/**
+ * @brief Sorts an array in place
+ * 
+ * @param array The array to sort
+ * @param compare A comparitor function. Returns < 0 if a should come before b,
+ * 0 if a and b are equal, and > 0 if a should come after b
+ */
+void array_sort(
+    void *array, 
+    int (*compare)(const void *a, const void *b)
+);
+
 
 #endif // ARRAY_H
