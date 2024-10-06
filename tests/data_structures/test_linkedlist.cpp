@@ -241,3 +241,47 @@ TEST(LinkedListIterator, Reverse) {
 
     linkedlist_destroy(&list);
 }
+
+TEST(LinkedList, SortAscending) {
+    linkedlist_t list;
+    linkedlist_init(&list, sizeof(int));
+
+    int items[] = {5, 3, 1, 4, 2};
+
+    linkedlist_from_raw(&list, sizeof(int), 5, items);
+
+    linkedlist_sort(&list, [](const void *a, const void *b) -> int {
+        return *(int *)a - *(int *)b;
+    });
+
+    int sorted[] = {1, 2, 3, 4, 5};
+    int item;
+    for (int i = 0; i < 5; i++) {
+        linkedlist_get(&list, i, &item);
+        EXPECT_EQ(item, sorted[i]);
+    }
+
+    linkedlist_destroy(&list);
+}
+
+TEST(LinkedList, SortDescending) {
+    linkedlist_t list;
+    linkedlist_init(&list, sizeof(int));
+
+    int items[] = {5, 3, 1, 4, 2};
+
+    linkedlist_from_raw(&list, sizeof(int), 5, items);
+
+    linkedlist_sort(&list, [](const void *a, const void *b) -> int {
+        return *(int *)b - *(int *)a;
+    });
+
+    int sorted[] = {5, 4, 3, 2, 1};
+    int item;
+    for (int i = 0; i < 5; i++) {
+        linkedlist_get(&list, i, &item);
+        EXPECT_EQ(item, sorted[i]);
+    }
+
+    linkedlist_destroy(&list);
+}

@@ -228,6 +228,27 @@ int linkedlist_from_raw(linkedlist_t *list, size_t item_size, size_t length, con
     return 0;
 }
 
+// --------------------
+void linkedlist_sort(linkedlist_t *list, int (*compare)(const void *, const void *)) {
+    linkedlist_node_t *current = list->head;
+    linkedlist_node_t *next;
+
+    while (current) {
+        next = current->next;
+
+        while (next) {
+            if (compare(current->data, next->data) > 0) {
+                void *temp = current->data;
+                current->data = next->data;
+                next->data = temp;
+            }
+
+            next = next->next;
+        }
+
+        current = current->next;
+    }
+}
 
 // --------------------
 int linkedlist_iter_init(

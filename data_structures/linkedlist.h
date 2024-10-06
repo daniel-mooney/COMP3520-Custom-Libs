@@ -146,6 +146,18 @@ int linkedlist_pop(linkedlist_t *list, void *item);
 int linkedlist_get(linkedlist_t *list, size_t index, void *item);
 
 /**
+ * @brief Sort the list in place
+ * 
+ * @param list A pointer to the linked list object
+ * @param compare A function to compare two items
+ */
+void linkedlist_sort(
+    linkedlist_t *list,
+    int (*compare)(const void *, const void *)
+);
+
+
+/**
  * @brief Create a linked list from a raw array
  * 
  * @param list A pointer to the linked list object
