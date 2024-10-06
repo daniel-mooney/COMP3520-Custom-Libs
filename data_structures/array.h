@@ -157,36 +157,4 @@ void *array_copy(void *array);
 size_t array_item_size(void *array);
 
 
-// +---------------------------------------------------------------------------+
-// |                           Private Interface                               |
-// +---------------------------------------------------------------------------+
-
-/**
- * @brief Retrieve the array header of an array
- * 
- * @param array Pointer to the start of the array
- * @return struct array_header* 
- */
-struct array_header *array_header(void *array);
-
-/**
- * @brief Returns a pointer to the start of the data in the array
- * 
- * @param array 
- * @return void* 
- */
-void *array_data(void *array);
-
-
-/**
- * @brief Ensures that the array has enough capacity to append n_append items.
- * Allocates more memory if necessary
- * 
- * @param array Pointer to the start of the array
- * @param n_append Number of items allow space for
- * @return `array` Pointer to the start of the array
- */
-void *array_ensure_capacity(void *array, size_t n_append);
-
-
 #endif // ARRAY_H

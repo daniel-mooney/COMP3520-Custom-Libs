@@ -1,6 +1,25 @@
 #include "array.h"
 
 
+
+//----------
+static struct array_header *array_header(void *array) {
+    return (struct array_header *) array - 1;
+}
+
+//----------
+static void *array_ensure_capacity(void *array, size_t n_append) {
+    struct array_header *h = array_header(array);
+    size_t req_capacity = h->length + n_append;
+
+    if (req_capacity > h->capacity) {
+        array = array_resize(array, req_capacity);
+    }
+
+    return array;
+}
+
+
 //----------
 void *array_init(size_t item_size, size_t initial_length) {
     size_t init_size = item_size * initial_length + sizeof(struct array_header);
@@ -99,31 +118,6 @@ size_t array_length(void *array) {
 size_t array_capacity(void *array) {
     struct array_header *h = array_header(array);
     return h->capacity;
-}
-
-
-//----------
-struct array_header *array_header(void *array) {
-    return (struct array_header *) array - 1;
-}
-
-
-//----------
-void *array_data(void *array) {
-    return array_header(array) + 1;
-}
-
-
-//----------
-void *array_ensure_capacity(void *array, size_t n_append) {
-    struct array_header *h = array_header(array);
-    size_t req_capacity = h->length + n_append;
-
-    if (req_capacity > h->capacity) {
-        array = array_resize(array, req_capacity);
-    }
-
-    return array;
 }
 
 
