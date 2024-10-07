@@ -114,6 +114,9 @@ size_t linkedlist_length(linkedlist_t *list) {
     return list->header.length;
 }
 
+int linkedlist_empty(linkedlist_t *list) {
+    return list->header.length == 0;
+}
 
 // --------------------
 size_t linkedlist_item_size(linkedlist_t *list) {
@@ -295,7 +298,7 @@ int linkedlist_iter_init(
         return 1;
     }
 
-    size_t start_idx = start < 0 ? list->header.length + start : start;
+    size_t start_idx = start < 0 ? (int)list->header.length + start : start;
 
     // Find the node at the start index
     linkedlist_node_t *current = list->head;

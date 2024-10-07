@@ -84,6 +84,14 @@ void linkedlist_destroy(linkedlist_t *list);
 size_t linkedlist_length(linkedlist_t *list);
 
 /**
+ * @brief Check if the list is empty
+ * 
+ * @param list A pointer to the linked list object
+ * @return int 1 if the list is empty, 0 otherwise
+ */
+int linkedlist_empty(linkedlist_t *list);
+
+/**
  * @brief Get the size of an item in the list
  * 
  * @param list A pointer to the linked list object

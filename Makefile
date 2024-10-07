@@ -13,6 +13,8 @@ ifeq ($(MAKECMDGOALS), test)
 	endif
 endif
 
+# TEST_DEPS =
+
 # Get the directory of the target
 TARGET_DIR = $(dir $(TARGET))
 TARGET_FILENAME = $(notdir $(TARGET))
@@ -20,6 +22,8 @@ TARGET_FILENAME = $(notdir $(TARGET))
 # Convert to test file path
 TEST_FILE = $(TEST_DIR)/$(TARGET_DIR)test_$(TARGET_FILENAME)pp
 TEST_TARGET = $(patsubst %.c, test_%.exe, $(TARGET_FILENAME))
+
+# TEST_DEPS_OBJ = $(patsubst %.c, $(OBJ_DIR)/test_%.o, $(TARGET_FILENAME))
 
 # Object files
 TARGET_OBJ = $(OBJ_DIR)/$(TARGET_FILENAME).o
