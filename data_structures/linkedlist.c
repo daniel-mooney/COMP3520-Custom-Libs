@@ -182,6 +182,14 @@ int linkedlist_remove(linkedlist_t *list, size_t index, void *item) {
         memcpy(item, current->data, list->header.item_size);
     }
 
+    if (current == list->head) {
+        list->head = current->next;
+    }
+
+    if (current == list->tail) {
+        list->tail = current->prev;
+    }
+
     node_detach(current);
     node_destroy(current);
 
