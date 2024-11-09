@@ -17,6 +17,7 @@ int my_sem_post(my_semaphore_t *sem) {
     sem->counter++;
 
     // Release waiting threads if no longer negative
+    // This is wrong, shouldn't use broadcast. Should always wake one
     if (sem->counter == 0) {
         pthread_cond_broadcast(&sem->cond);
     }
